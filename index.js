@@ -29,6 +29,8 @@ term.bold.green('Type part of your command: ');
  *     - Lower level, will require a lot of code
  * 
  * Next steps:
- *  1. Implemt prototype with autocomplete
+ *  1. Implement prototype with autocomplete
+ *  2. Implement prototype with autocomplete
+ *  ?. Implement prototype with vorpal 
  *  
  ***************************************************/
