@@ -1,0 +1,17 @@
+{
+  "name": "quiver",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Eduardo <eduardo@portilho.com> (http://www.portilho.com/)",
+  "license": "MIT",
+  "preferGlobal": true,
+  "bin": {
+    "qv": "index.js"
+  },
+  "dependencies": {
+    "terminal-kit": "^1.10.2"
+  }
+}
