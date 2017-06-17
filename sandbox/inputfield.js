@@ -1,15 +1,13 @@
 var term = require( 'terminal-kit' ).terminal;
 
 var COMMANDS = [
-  'yarn build recently-played',
-  'yarn build glue-reference',
-  '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps',
-  '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps2',
-  '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps3',
-  '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps4',
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+  'Lorem iaculis risus non libero efficitur lobortis.',
+  'Lorem sem sem, mollis vitae mi eget, lacinia semper felis.',
+  'Lorem finibus felis vitae ante volutpat tristique. In hac habitasse platea dictumst.'
 ];
 
-term.bold.green('Type part of your command: ');
+term.bold.green('Test: ');
 term.inputField({
     // autoComplete: commands,
     autoComplete: function (text) {
@@ -30,7 +28,7 @@ term.inputField({
     autoCompleteHint: true,
   },
   function(error, input) {
-    term.green("\nRun command: '%s'\n" , input);
+    term.green("\nSelected: '%s'\n" , input);
     process.exit() ;
   }
 );
