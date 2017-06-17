@@ -12,6 +12,7 @@
     "qv": "index.js"
   },
   "dependencies": {
+    "node-cmd": "^3.0.0",
     "terminal-kit": "^1.10.2",
     "vorpal": "^1.12.0"
   }

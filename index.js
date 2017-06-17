@@ -1,6 +1,8 @@
+var nodecmd = require('node-cmd');
 var vorpal = require('vorpal')()
 
 var COMMANDS = [
+  'ls',
   '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps',
   '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps2',
   '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps3',
@@ -34,16 +36,20 @@ vorpal
       message: 'Run command:',
       choices: filteredCmds
     }, function (result) {
-      const cmd = result.cmd;
+      const commandString = result.cmd;
 
       // Set the input:
       // callback();
       // vorpal.ui.input(result.cmd);
       
       //Run and quit
-      this.log(`run "${cmd}"`);
+      //this.log(`run "${commandString}"`);
       vorpal.hide();
+      
       callback();
+      nodecmd.get(commandString, function(err, data, stderr){
+            console.log(data)
+        });
 
     }.bind(this));
   });
