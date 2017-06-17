@@ -34,10 +34,13 @@
       - Pretty close
     ✖️ 2. Implement prototype with grabInput
       - Too much work
-    ✖️ 3. Implement prototype with vorpal
-      - Bad UX
+    ? 3. Implement prototype with vorpal
+      - Bad UX on highlevel (no menu?)
+      - Test lowlevel implementation with redrw?
     4. Test other libs
     5. Extend fish
     6. Patch inputField
  2. Read commands from bash/fish history
- 3. 
+ 3. Store commands
+ 4. Execute commands
+    - https://www.npmjs.com/package/node-cmd 
