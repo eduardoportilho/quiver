@@ -1,4 +1,5 @@
 var nodecmd = require('node-cmd');
+var fs = require('fs');
 var vorpal = require('vorpal')()
 
 var COMMANDS = [
@@ -17,6 +18,23 @@ vorpal
     callback();
     vorpal.ui.input(args.words.join(' '));
     vorpal.exec('_list');
+  });
+vorpal
+  .command('history', 'List entries from history')
+  .action(function(args, callback) {
+    let fishHistory = fs.readFileSync('/Users/eduardoportilho/.local/share/fish/fish_history', 'utf8')
+      .split('\n')
+      .filter((row) => row.startsWith('- cmd: '))
+      .map((row) => row.replace('- cmd: ', ''))
+
+    this.prompt({
+      type: 'list',
+      name: 'cmd',
+      message: 'Hstory:',
+      choices: fishHistory
+    }, function (result) {
+      callback();
+    }.bind(this));
   });
 
 vorpal
