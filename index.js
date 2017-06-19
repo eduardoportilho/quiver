@@ -65,10 +65,7 @@ vorpal
       vorpal.hide();
       
       callback();
-      nodecmd.get(commandString, function(err, data, stderr){
-            console.log(data)
-        });
-
+      executeCommand(commandString);
     }.bind(this));
   });
 
@@ -85,6 +82,12 @@ vorpal
   .delimiter('quiver$')
   .show();
 
+
+function executeCommand(commandString) {
+  nodecmd.get(commandString, function(err, data, stderr){
+    console.log(data)
+  });
+}
 
 function getCommandsContaining(all, text) {
   return all.filter(function(cmd) {
