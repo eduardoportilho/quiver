@@ -3,6 +3,8 @@ var fs = require('fs');
 var vorpal = require('vorpal')();
 const { execSync } = require('child_process');
 
+const HISTORY_COUNT = 5
+
 var COMMANDS = [
   'ls -lisa',
   '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps',
@@ -20,13 +22,16 @@ vorpal
     vorpal.ui.input(args.words.join(' '));
     vorpal.exec('_list');
   });
+
 vorpal
-  .command('history', 'List entries from history')
+  .command('hist', 'List entries from history')
   .action(function(args, callback) {
     let fishHistory = fs.readFileSync('/Users/eduardoportilho/.local/share/fish/fish_history', 'utf8')
       .split('\n')
       .filter((row) => row.startsWith('- cmd: '))
       .map((row) => row.replace('- cmd: ', ''))
+      .slice(HISTORY_COUNT*-1)
+      .reverse();
 
     this.prompt({
       type: 'list',
