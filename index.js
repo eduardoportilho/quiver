@@ -1,9 +1,10 @@
 var nodecmd = require('node-cmd');
 var fs = require('fs');
-var vorpal = require('vorpal')()
+var vorpal = require('vorpal')();
+const { execSync } = require('child_process');
 
 var COMMANDS = [
-  'ls',
+  'ls -lisa',
   '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps',
   '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps2',
   '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps3',
@@ -69,7 +70,6 @@ vorpal
     }.bind(this));
   });
 
-
 vorpal.on('keypress', function (event) {
   const listKeys = ['tab', 'up', 'down']
   if (listKeys.includes(event.key)) {
@@ -84,9 +84,7 @@ vorpal
 
 
 function executeCommand(commandString) {
-  nodecmd.get(commandString, function(err, data, stderr){
-    console.log(data)
-  });
+  execSync(commandString, {stdio: 'inherit'});
 }
 
 function getCommandsContaining(all, text) {
