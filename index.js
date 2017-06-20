@@ -1,6 +1,5 @@
-var nodecmd = require('node-cmd');
-var fs = require('fs');
-var vorpal = require('vorpal')();
+const fs = require('fs');
+const vorpal = require('vorpal')();
 const { execSync } = require('child_process');
 
 const HISTORY_COUNT = 5
