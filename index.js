@@ -1,30 +1,39 @@
+#! /usr/bin/env node
+
 const fs = require('fs');
 const vorpal = require('vorpal')();
 const { execSync } = require('child_process');
 
-const HISTORY_COUNT = 5
+const HISTORY_COUNT = 10
+const LOCAL_STORAGE_ID = 'quiver'
+const COMMANDS_LOCAL_STORAGE_ID = 'commands'
+const SEPARATOR = ':::'
 
-var COMMANDS = [
-  'ls -lisa',
-  '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps',
-  '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps2',
-  '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps3',
-  '/Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps4',
-  'yarn build recently-played',
-  'yarn build glue-reference',
-];
+vorpal.localStorage(LOCAL_STORAGE_ID);
 
+/**
+ * Unhandled commands
+ */
 vorpal
   .catch('[words...]', 'Executes a command')
   .action(function (args, callback) {
     callback();
     vorpal.ui.input(args.words.join(' '));
-    vorpal.exec('_list');
+    vorpal.exec('_run');
   });
 
+/**
+ * Add commands from history
+ */
 vorpal
-  .command('hist', 'List entries from history')
+  .command('add [commandTokens...]', 'Add entries from history')
   .action(function(args, callback) {
+    if (args.commandTokens) {
+      let commandString = args.commandTokens.join(' ');
+      addCommand(commandString);
+      return callback();
+    }
+
     let fishHistory = fs.readFileSync('/Users/eduardoportilho/.local/share/fish/fish_history', 'utf8')
       .split('\n')
       .filter((row) => row.startsWith('- cmd: '))
@@ -35,22 +44,60 @@ vorpal
     this.prompt({
       type: 'list',
       name: 'cmd',
-      message: 'Hstory:',
+      message: 'Chose a command to store:',
       choices: fishHistory
     }, function (result) {
-      callback();
+      const commandString = result.cmd;
+      addCommand(commandString);
+      return callback();
     }.bind(this));
   });
 
+/**
+ * Add commands from history
+ */
 vorpal
-  .command('_list', 'List executables')
+  .command('rm', 'Remove command from list')
+  .action(function(args, callback) {
+    let commands = getCommands();
+    if (commands.length === 0) {
+      this.log(`>>> No commands stored, try adding one using "add".`);
+      callback();
+      return;
+    }
+
+    this.prompt({
+      type: 'list',
+      name: 'cmd',
+      message: 'Remove command::',
+      choices: commands
+    }, function (result) {
+      const commandString = result.cmd;
+      let index = commands.indexOf(commandString);
+      commands.splice(index, 1);
+      storeCommands(commands);
+      return callback();
+    }.bind(this));
+  });
+
+/**
+ * Run command from list
+ */
+vorpal
+  .command('_run', 'List executables')
   .hidden()
   .action(function(args, callback) {
+    let commands = getCommands();
+    if (commands.length === 0) {
+      this.log(`>>> No commands stored, try adding one using "add".`);
+      return callback();
+    }
+
     const input = vorpal.ui.input();
-    let filteredCmds = getCommandsContaining(COMMANDS, input)
+    let filteredCmds = filterCommandsContaining(commands, input)
     if (!filteredCmds.length) {
       this.log(`No commands with found containing "${input}", listing all...\n`)
-      filteredCmds = COMMANDS
+      filteredCmds = commands
     }
 
     this.prompt({
@@ -60,38 +107,62 @@ vorpal
       choices: filteredCmds
     }, function (result) {
       const commandString = result.cmd;
-
-      // Set the input:
-      // callback();
-      // vorpal.ui.input(result.cmd);
-      
-      //Run and quit
-      //this.log(`run "${commandString}"`);
       vorpal.hide();
-      
       callback();
       executeCommand(commandString);
     }.bind(this));
   });
 
+/**
+ * Handle keypress
+ */
 vorpal.on('keypress', function (event) {
   const listKeys = ['tab', 'up', 'down']
   if (listKeys.includes(event.key)) {
     var input = event.value
-    vorpal.exec('_list')
+    vorpal.exec('_run')
   }
 })
 
+/**
+ * Run quiver
+ */
 vorpal
   .delimiter('quiver$')
   .show();
 
+/**
+ * Helper functions
+ */
+
+function storeCommands(commands) {
+  let value = '';
+  if (commands.length > 0) {
+    value = commands.join(SEPARATOR)
+  }
+  vorpal.localStorage.setItem(COMMANDS_LOCAL_STORAGE_ID, value);
+}
+
+function addCommand(commandString) {
+  let commands = getCommands();
+  commands.push(commandString);
+  storeCommands(commands);
+}
+
+function getCommands() {
+  let value = vorpal.localStorage
+    .getItem(COMMANDS_LOCAL_STORAGE_ID) || '';
+  if (value.length <= 0) {
+    return [];
+  }
+  return value.split(SEPARATOR);
+}
 
 function executeCommand(commandString) {
   execSync(commandString, {stdio: 'inherit'});
 }
 
-function getCommandsContaining(all, text) {
+function filterCommandsContaining(all, text) {
   return all.filter(function(cmd) {
     return cmd.toLowerCase().includes(text.toLowerCase());
   })
