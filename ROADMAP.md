@@ -43,4 +43,9 @@
  2. Read commands from bash/fish history
  3. Store commands
  4. Execute commands
-    - https://www.npmjs.com/package/node-cmd 
+    - https://www.npmjs.com/package/node-cmd
+
+## Problems:
+* Add /Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps
+  -  Error: Invalid option: 'app-'. Showing Help:
+* How to cancel an rm? Ctrl-C doesn't work.
