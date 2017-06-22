@@ -10,20 +10,7 @@ var COMMANDS = [
 term.bold.green('Test: ');
 term.inputField({
     // autoComplete: commands,
-    autoComplete: function (text) {
-      var cmdsStartingWith = getCommandsStartingWith(text)
-      if (cmdsStartingWith.length > 1) {
-        var commonInitialSubstring =  getCommonInitialSubstring(cmdsStartingWith)
-        if (commonInitialSubstring !== text) {
-          return commonInitialSubstring;
-        }
-      }
-      var cmdsContaining = getCommandsContaining(text)
-      if (cmdsContaining.length === 0) {
-        return text
-      }
-      return cmdsContaining.length === 1 ? cmdsContaining[0] : cmdsContaining;
-    },
+    autoComplete: autoCompleteWithHint,
     autoCompleteMenu: true,
     autoCompleteHint: true,
   },
@@ -32,6 +19,21 @@ term.inputField({
     process.exit() ;
   }
 );
+
+function autoCompleteWithHint(text) {
+  var cmdsStartingWith = getCommandsStartingWith(text)
+  if (cmdsStartingWith.length > 1) {
+    var commonInitialSubstring =  getCommonInitialSubstring(cmdsStartingWith)
+    if (commonInitialSubstring !== text) {
+      return commonInitialSubstring;
+    }
+  }
+  var cmdsContaining = getCommandsContaining(text)
+  if (cmdsContaining.length === 0) {
+    return text
+  }
+  return cmdsContaining.length === 1 ? cmdsContaining[0] : cmdsContaining;
+};
 
 function getCommandsStartingWith(text) {
   return COMMANDS.filter(function(cmd) { 
