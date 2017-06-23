@@ -26,13 +26,9 @@ vorpal
  * Add commands from history
  */
 vorpal
-  .command('add [commandTokens...]', 'Add entries from history')
+  .command('add', 'Add entries from history')
   .action(function(args, callback) {
-    if (args.commandTokens) {
-      let commandString = args.commandTokens.join(' ');
-      addCommand(commandString);
-      return callback();
-    }
+    const enterNewCommandOption = '<Enter a new command>';
 
     let fishHistory = fs.readFileSync('/Users/eduardoportilho/.local/share/fish/fish_history', 'utf8')
       .split('\n')
@@ -40,6 +36,7 @@ vorpal
       .map((row) => row.replace('- cmd: ', ''))
       .slice(HISTORY_COUNT*-1)
       .reverse();
+    fishHistory.unshift(enterNewCommandOption);
 
     this.prompt({
       type: 'list',
@@ -48,7 +45,11 @@ vorpal
       choices: fishHistory
     }, function (result) {
       const commandString = result.cmd;
-      addCommand(commandString);
+      if (commandString === enterNewCommandOption) {
+        promptForCommandToAdd.call(this);
+      } else {
+        addCommand(commandString);  
+      }
       return callback();
     }.bind(this));
   });
@@ -134,6 +135,10 @@ vorpal
 /**
  * Helper functions
  */
+
+function promptForCommandToAdd() {
+  //TODO implement this
+}
 
 function storeCommands(commands) {
   let value = '';
