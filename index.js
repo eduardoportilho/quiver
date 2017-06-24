@@ -46,11 +46,11 @@ vorpal
     }, function (result) {
       const commandString = result.cmd;
       if (commandString === enterNewCommandOption) {
-        promptForCommandToAdd.call(this);
+        promptForCommandToAdd.call(this, callback);
       } else {
-        addCommand(commandString);  
+        addCommand(commandString);
+        return callback(); 
       }
-      return callback();
     }.bind(this));
   });
 
@@ -136,8 +136,16 @@ vorpal
  * Helper functions
  */
 
-function promptForCommandToAdd() {
-  //TODO implement this
+function promptForCommandToAdd(callback) {
+  this.prompt({
+      type: 'input',
+      name: 'cmd',
+      message: 'Enter the command:'
+    }, function (result) {
+      const commandString = result.cmd;
+      addCommand(commandString);
+      callback();
+    });
 }
 
 function storeCommands(commands) {
