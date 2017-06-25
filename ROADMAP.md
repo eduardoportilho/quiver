@@ -49,3 +49,4 @@
 * Add /Applications/Spotify.app/Contents/MacOS/Spotify --app-directory=./apps
   -  Error: Invalid option: 'app-'. Showing Help:
 * How to cancel an rm? Ctrl-C doesn't work.
+  - Implement a inquirer prompt https://github.com/SBoudrias/Inquirer.js/blob/master/lib/prompts/input.js

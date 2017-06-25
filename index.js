@@ -12,14 +12,15 @@ const SEPARATOR = ':::'
 vorpal.localStorage(LOCAL_STORAGE_ID);
 
 /**
- * Unhandled commands
+ * Unhandled commands: when user type part of the command and hit enter
+ * we pass the input to _listAndRun 
  */
 vorpal
   .catch('[words...]', 'Executes a command')
   .action(function (args, callback) {
     callback();
     vorpal.ui.input(args.words.join(' '));
-    vorpal.exec('_run');
+    vorpal.exec('_listAndRun');
   });
 
 /**
@@ -55,7 +56,7 @@ vorpal
   });
 
 /**
- * Add commands from history
+ * Remove commands from history
  */
 vorpal
   .command('rm', 'Remove command from list')
@@ -82,10 +83,23 @@ vorpal
   });
 
 /**
+ * List stored commands
+ */
+vorpal
+  .command('ls', 'List commands')
+  .action(function(args, callback) {
+    let commands = getCommands();
+    commands.forEach((cmd) => {
+      this.log(`> ${cmd}`)
+    })
+    callback();
+  });
+
+/**
  * Run command from list
  */
 vorpal
-  .command('_run', 'List executables')
+  .command('_listAndRun', 'List executables')
   .hidden()
   .action(function(args, callback) {
     let commands = getCommands();
@@ -121,9 +135,10 @@ vorpal.on('keypress', function (event) {
   const listKeys = ['tab', 'up', 'down']
   if (listKeys.includes(event.key)) {
     var input = event.value
-    vorpal.exec('_run')
+    vorpal.exec('_listAndRun')
   }
 })
+
 
 /**
  * Run quiver
