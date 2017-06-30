@@ -9,7 +9,7 @@
   "license": "MIT",
   "preferGlobal": true,
   "bin": {
-    "qv": "index.js"
+    "qv": "src/index.js"
   },
   "dependencies": {
     "terminal-kit": "^1.10.2",
