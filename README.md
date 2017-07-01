@@ -1,5 +1,8 @@
 # quiver
 
+## Install
+* npm install --global quiver
+* npm link
 
 ## References:
 * [terminal-kit](https://github.com/cronvel/terminal-kit)
