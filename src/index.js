@@ -1,6 +1,7 @@
+#! /usr/bin/env node
 const inquirer = require('inquirer');
-const commandsService = require('../commands');
-const utilService = require('../util');
+const commandsService = require('./commands');
+const utilService = require('./util');
 
 // remove 'node' and 'file.js'
 main(process.argv.slice(2));
