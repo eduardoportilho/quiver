@@ -1,10 +1,12 @@
 const LocalStorage = require('node-localstorage').LocalStorage;
 
-const LOCAL_STORAGE_ID = 'quiver'
 const COMMANDS_ITEM_ID = 'commands'
 const COMMAND_SEPARATOR = ':::'
 
-const localStorage = new LocalStorage(LOCAL_STORAGE_ID);
+const path = require('path');
+const os = require('os');
+const localStoragePath = path.normalize(path.join(os.tmpdir(), '/.quiver'));
+const localStorage = new LocalStorage(localStoragePath);
 
 /**
  * Return all stored commands.
@@ -44,4 +46,5 @@ function setCommands(commands) {
 module.exports = {
   getCommands: getCommands,
   addCommand: addCommand,
+  setCommands: setCommands,
 }
