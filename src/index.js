@@ -2,7 +2,8 @@
 
 const fs = require('fs');
 const vorpal = require('vorpal')();
-const { execSync } = require('child_process');
+const { executeCommand } = require('./util');
+const { getCommands, addCommand } = require('./commands');
 
 const HISTORY_COUNT = 10
 const LOCAL_STORAGE_ID = 'quiver'
@@ -139,7 +140,6 @@ vorpal.on('keypress', function (event) {
   }
 })
 
-
 /**
  * Run quiver
  */
@@ -161,33 +161,6 @@ function promptForCommandToAdd(callback) {
       addCommand(commandString);
       callback();
     });
-}
-
-function storeCommands(commands) {
-  let value = '';
-  if (commands.length > 0) {
-    value = commands.join(SEPARATOR)
-  }
-  vorpal.localStorage.setItem(COMMANDS_LOCAL_STORAGE_ID, value);
-}
-
-function addCommand(commandString) {
-  let commands = getCommands();
-  commands.push(commandString);
-  storeCommands(commands);
-}
-
-function getCommands() {
-  let value = vorpal.localStorage
-    .getItem(COMMANDS_LOCAL_STORAGE_ID) || '';
-  if (value.length <= 0) {
-    return [];
-  }
-  return value.split(SEPARATOR);
-}
-
-function executeCommand(commandString) {
-  execSync(commandString, {stdio: 'inherit'});
 }
 
 function filterCommandsContaining(all, text) {
