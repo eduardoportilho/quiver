@@ -1,8 +1,6 @@
 #! /usr/bin/env node
-
-const fs = require('fs');
 const vorpal = require('vorpal')();
-const { executeCommand } = require('./util');
+const { executeCommand, getFishHistory } = require('./util');
 const { getCommands, addCommand } = require('./commands');
 
 const HISTORY_COUNT = 10
@@ -32,12 +30,7 @@ vorpal
   .action(function(args, callback) {
     const enterNewCommandOption = '<Enter a new command>';
 
-    let fishHistory = fs.readFileSync('/Users/eduardoportilho/.local/share/fish/fish_history', 'utf8')
-      .split('\n')
-      .filter((row) => row.startsWith('- cmd: '))
-      .map((row) => row.replace('- cmd: ', ''))
-      .slice(HISTORY_COUNT*-1)
-      .reverse();
+    let fishHistory = getFishHistory(HISTORY_COUNT);
     fishHistory.unshift(enterNewCommandOption);
 
     this.prompt({
