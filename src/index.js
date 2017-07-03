@@ -2,6 +2,24 @@
 const inquirer = require('inquirer');
 const commandsService = require('./commands');
 const utilService = require('./util');
+const chalk = require('chalk');
+
+// styles
+const success = chalk.bold.green;
+const warn = chalk.bold.yellow;
+const info = chalk.bold.blue;
+
+const log = {
+  success: buildLogger(chalk.bold.green),
+  warn: buildLogger(chalk.bold.yellow),
+  info: buildLogger(chalk.bold.blue),
+}
+
+function buildLogger(style) {
+  return (text) => {
+    console.log(style(text));
+  }
+}
 
 // remove 'node' and 'file.js'
 main(process.argv.slice(2));
@@ -24,14 +42,18 @@ function main(args) {
 function listCommands() {
   const commands = commandsService.getCommands()
   if(commands.length === 0) {
-    console.log(`No commands found!`); 
+    log.warn(`No commands found!`); 
   } else {
-    commands.forEach(cmd => console.log(`> ${cmd}`)); 
+    commands.forEach(cmd => log.info(`> ${cmd}`)); 
   }
 }
 
 function listCommandsAndRun() {
   const commands = commandsService.getCommands();
+  if(commands.length === 0) {
+    log.warn(`No commands found!`);
+    return;
+  }
   inquirer.prompt({
     type: 'list',
     name: 'cmd',
@@ -50,7 +72,7 @@ function addCommand(args) {
   } else {
     const command = args.join(' ');
     commandsService.addCommand(command);
-    console.log(`Command added: "${command}"`);
+    log.success(`Command added: "${command}"`);
   }
 }
 
@@ -62,7 +84,7 @@ function askForCommandAndAdd() {
   }).then(function (result) {
     const command = result.cmd;
     commandsService.addCommand(command);
-    console.log(`Command added: "${command}"`);
+    log.success(`Command added: "${command}"`);
   });
 }
 
@@ -76,7 +98,7 @@ function showCommandHistoryAndAdd() {
   }).then(function (result) {
     const command = result.cmd;
     commandsService.addCommand(command);
-    console.log(`Command added: "${command}"`);
+    log.success(`Command added: "${command}"`);
   });
 }
 
@@ -99,6 +121,6 @@ function removeCommands(args) {
       commands.splice(index, 1);
     });
     commandsService.setCommands(commands);
-    console.log('Done!');
+    log.success('Done!');
   });
 }

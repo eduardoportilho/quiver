@@ -12,6 +12,7 @@
     "qv": "src/index.js"
   },
   "dependencies": {
+    "chalk": "^2.0.1",
     "inquirer": "^3.1.1",
     "node-localstorage": "^1.3.0",
     "terminal-kit": "^1.10.2",
