@@ -1,5 +1,18 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
+const chalk = require('chalk');
+
+const logger = {
+  success: buildLogger(chalk.bold.green),
+  warn: buildLogger(chalk.bold.yellow),
+  info: buildLogger(chalk.bold.blue),
+}
+
+function buildLogger(style) {
+  return (text) => {
+    console.log(style(text));
+  }
+}
 
 function executeCommand(commandString) {
   execSync(commandString, {stdio: 'inherit'});
@@ -17,4 +30,5 @@ function getFishHistory(max = 10) {
 module.exports = {
   executeCommand: executeCommand,
   getFishHistory: getFishHistory,
+  logger: logger
 }
