@@ -44,6 +44,7 @@ function listCommandsAndRun() {
     message: 'Run command:',
     choices: commands
   }).then(function (result) {
+    commandsService.moveToTop(result.cmd);
     utilService.executeCommand(result.cmd);
   });
 }
