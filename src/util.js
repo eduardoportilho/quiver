@@ -11,6 +11,7 @@ const logger = {
 function buildLogger(style) {
   return (text) => {
     console.log(style(text));
+    return logger;
   }
 }
 

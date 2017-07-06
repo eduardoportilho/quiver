@@ -2,6 +2,7 @@
 const inquirer = require('inquirer');
 const commandsService = require('./commands');
 const utilService = require('./util');
+const chalk = require('chalk');
 
 const logger = utilService.logger;
 
@@ -56,6 +57,7 @@ function runPreviousCommand(arg) {
   const commands = commandsService.getCommands();
   const index = (arg.length % commands.length) - 1;
   const command = commands[index];
+  console.log(chalk.bold.white('Run command: ') + chalk.cyan(command));
   commandsService.moveToTop(command);
   utilService.executeCommand(command);
 }
