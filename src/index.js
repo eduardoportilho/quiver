@@ -21,6 +21,9 @@ function main(args) {
   else if (args[0] === 'ls') {
     listCommands();
   }
+  else if (args[0].charAt(0) === '!') {
+    runPreviousCommand(args[0]);
+  }
 }
 
 function listCommands() {
@@ -47,6 +50,14 @@ function listCommandsAndRun() {
     commandsService.moveToTop(result.cmd);
     utilService.executeCommand(result.cmd);
   });
+}
+
+function runPreviousCommand(arg) {
+  const commands = commandsService.getCommands();
+  const index = (arg.length % commands.length) - 1;
+  const command = commands[index];
+  commandsService.moveToTop(command);
+  utilService.executeCommand(command);
 }
 
 function addCommand(args) {
