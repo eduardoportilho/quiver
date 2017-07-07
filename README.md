@@ -2,6 +2,8 @@
 
 A command line tool to store frequently used commands.
 
+![Tour GIF](https://media.giphy.com/media/l0IypDeK1kNWG3xks/giphy.gif)
+
 ## Install
 
 * `npm install --global quiver`
