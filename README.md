@@ -25,9 +25,9 @@ A command line tool to store frequently used commands.
 
 * `qv ls`: Display the list of stored commands.
 
-### To remove a command:
+### To remove commands:
 
-* `qv rm`: Display the list of stored commands and prompt you to choose one to remove.
+* `qv rm`: Display the list of stored commands and prompt you to choose the ones to remove.
 
 ## References:
 * [inquirer](https://github.com/SBoudrias/Inquirer.js/)
