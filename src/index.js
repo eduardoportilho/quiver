@@ -2,8 +2,6 @@
 const inquirer = require('inquirer');
 const commandsService = require('./commands');
 const utilService = require('./util');
-const chalk = require('chalk');
-
 const logger = utilService.logger;
 
 // remove 'node' and 'file.js'
@@ -55,9 +53,16 @@ function listCommandsAndRun() {
 
 function runPreviousCommand(arg) {
   const commands = commandsService.getCommands();
-  const index = (arg.length % commands.length) - 1;
-  const command = commands[index];
-  console.log(chalk.bold.white('Run command: ') + chalk.cyan(command));
+  if(commands.length === 0) {
+    logger.warn(`No commands found!`);
+    return;
+  }
+  let commandIndex = arg.length - 1;
+  if (commandIndex => commands.length) {
+    commandIndex = commandIndex % commands.length;
+  } 
+  const command = commands[commandIndex];
+  logger.labelMsg('Run command:', command);
   commandsService.moveToTop(command);
   utilService.executeCommand(command);
 }

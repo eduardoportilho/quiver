@@ -6,6 +6,9 @@ const logger = {
   success: buildLogger(chalk.bold.green),
   warn: buildLogger(chalk.bold.yellow),
   info: buildLogger(chalk.bold.blue),
+  labelMsg: (label, content) => {
+    console.log(chalk.bold.white(label) + ' '  + chalk.cyan(content));
+  },
 }
 
 function buildLogger(style) {
