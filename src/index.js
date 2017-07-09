@@ -2,7 +2,12 @@
 const inquirer = require('inquirer');
 const commandsService = require('./commands');
 const utilService = require('./util');
+var Promise = require('promise');
+
 const logger = utilService.logger;
+
+// register inquirer autocomplete
+inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'));
 
 // remove 'node' and 'file.js'
 main(process.argv.slice(2));
@@ -41,10 +46,18 @@ function listCommandsAndRun() {
     return;
   }
   inquirer.prompt({
-    type: 'list',
+    type: 'autocomplete',
     name: 'cmd',
     message: 'Run command:',
-    choices: commands
+    source: function(answersSoFar, input) {
+      input = input || '';
+      return new Promise(function(resolve) {
+        const filtered = commands.filter(function(cmd) {
+          return cmd.toLowerCase().includes(input.toLowerCase());
+        });
+        resolve(filtered);
+      });
+    },
   }).then(function (result) {
     commandsService.moveToTop(result.cmd);
     utilService.executeCommand(result.cmd);
