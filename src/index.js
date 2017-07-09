@@ -35,7 +35,7 @@ function listCommands() {
   if(commands.length === 0) {
     logger.warn(`No commands found!`); 
   } else {
-    commands.forEach(cmd => logger.info(`> ${cmd}`)); 
+    commands.forEach(cmd => logger.labelMsg('>', cmd)); 
   }
 }
 
