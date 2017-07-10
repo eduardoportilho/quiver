@@ -13,6 +13,14 @@ inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'))
 main(process.argv.slice(2));
 
 function main(args) {
+  if (args.indexOf('-g') >= 0) {
+    const groupIndex = args.indexOf('-g');
+    const groupName = args[groupIndex+1];
+    commandsService.setCommandGroup(groupName);
+    args.splice(groupIndex, 2);
+    logger.labelMsg('Group:', groupName);
+  }
+
   if (args.length === 0) {
     listCommandsAndRun();
   }

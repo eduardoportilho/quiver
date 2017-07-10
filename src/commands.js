@@ -1,12 +1,20 @@
 const LocalStorage = require('node-localstorage').LocalStorage;
-
-const COMMANDS_ITEM_ID = 'commands'
-const COMMAND_SEPARATOR = ':::'
+const COMMAND_SEPARATOR = ':::';
 
 const path = require('path');
 const os = require('os');
 const localStoragePath = path.normalize(path.join(os.tmpdir(), '/.quiver'));
 const localStorage = new LocalStorage(localStoragePath);
+
+let commandEntryKey = 'commands';
+
+/**
+ * Set the command group id.
+ * @param {string} group
+ */
+function setCommandGroup(group) {
+  commandEntryKey = `commands_${group}`;
+}
 
 /**
  * Return all stored commands.
@@ -14,7 +22,7 @@ const localStorage = new LocalStorage(localStoragePath);
  */
 function getCommands() {
   let value = localStorage
-    .getItem(COMMANDS_ITEM_ID) || '';
+    .getItem(commandEntryKey) || '';
   if (value.length <= 0) {
     return [];
   }
@@ -40,7 +48,7 @@ function setCommands(commands) {
   if (commands.length > 0) {
     value = commands.join(COMMAND_SEPARATOR)
   }
-  localStorage.setItem(COMMANDS_ITEM_ID, value);
+  localStorage.setItem(commandEntryKey, value);
 }
 
 /**
@@ -58,6 +66,7 @@ function moveToTop(command) {
 }
 
 module.exports = {
+  setCommandGroup: setCommandGroup,
   getCommands: getCommands,
   addCommand: addCommand,
   setCommands: setCommands,
