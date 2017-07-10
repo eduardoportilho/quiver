@@ -36,7 +36,7 @@ A command line tool to store frequently used commands.
 If you use different commands in distinct contexts, it might be usefull to store them in groups. In this case the commands will be stored, retrieved and removed from a separated source.
 To run any Quiver command in the context of a specific group, you need to inform the group name with the `-g <group>` option.
 
-* `qv [<command and options>] -g <group>`: Run the provided quiver option in the context of the provided group.
+* `qv [<command and options>] -g <group>`: Run the quiver command with options in the context of the provided group.
 
 ## References:
 * [inquirer](https://github.com/SBoudrias/Inquirer.js/)
