@@ -39,11 +39,14 @@ function main(args) {
 }
 
 function listCommands() {
-  const commands = commandsService.getCommands()
-  if(commands.length === 0) {
+  const commandGroups = commandsService.getCommandGroups();
+  if(Object.keys(commandGroups).length === 0) {
     logger.warn(`No commands found!`); 
   } else {
-    commands.forEach(cmd => logger.labelMsg('>', cmd)); 
+    for (let group in commandGroups) {
+      let commands = commandGroups[group];
+      commands.forEach(cmd => logger.labelMsg(`[${group}]`, cmd));
+    }
   }
 }
 

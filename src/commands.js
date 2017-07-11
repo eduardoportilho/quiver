@@ -5,24 +5,25 @@ const path = require('path');
 const os = require('os');
 const localStoragePath = path.normalize(path.join(os.tmpdir(), '/.quiver'));
 const localStorage = new LocalStorage(localStoragePath);
+const defaultGroup = 'group_default';
 
-let commandEntryKey = 'commands';
+let currentGroup = defaultGroup;
 
 /**
  * Set the command group id.
  * @param {string} group
  */
 function setCommandGroup(group) {
-  commandEntryKey = `commands_${group}`;
+  currentGroup = `group_${group}`;
 }
 
 /**
  * Return all stored commands.
  * @return {string[]} List of commands.
  */
-function getCommands() {
+function getCommands(group = currentGroup) {
   let value = localStorage
-    .getItem(commandEntryKey) || '';
+    .getItem(group) || '';
   if (value.length <= 0) {
     return [];
   }
@@ -48,7 +49,7 @@ function setCommands(commands) {
   if (commands.length > 0) {
     value = commands.join(COMMAND_SEPARATOR)
   }
-  localStorage.setItem(commandEntryKey, value);
+  localStorage.setItem(currentGroup, value);
 }
 
 /**
@@ -65,10 +66,29 @@ function moveToTop(command) {
   setCommands(commands);
 }
 
+/**
+ * List the groups and its commands.
+ * @return {Object} Object with the group in the key and an array of commans in the value.
+ */
+function getCommandGroups() {
+  let cmdGroups = {};
+  const keyCount = localStorage.length;
+  for (let i = 0; i < keyCount; i++) {
+    let key = localStorage.key(i);
+    let commands = getCommands(key);
+    if (key) {
+      key = key.replace('group_', '');
+    }
+    cmdGroups[key] = commands;
+  }
+  return cmdGroups;
+}
+
 module.exports = {
   setCommandGroup: setCommandGroup,
   getCommands: getCommands,
   addCommand: addCommand,
   setCommands: setCommands,
   moveToTop: moveToTop,
+  getCommandGroups: getCommandGroups,
 }
