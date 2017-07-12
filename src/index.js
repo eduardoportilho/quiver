@@ -24,6 +24,9 @@ function main(args) {
   if (args.length === 0) {
     listCommandsAndRun();
   }
+  else if (args.indexOf('-h') >= 0) {
+    showHelp(args);
+  }
   else if (args[0] === 'add') {
     addCommand(args.slice(1));
   }
@@ -36,6 +39,10 @@ function main(args) {
   else if (args[0].charAt(0) === '!') {
     runPreviousCommand(args[0]);
   }
+}
+
+function showHelp() {
+  logger.labelMsg('Storage path:', commandsService.getStoragePath());
 }
 
 function listCommands() {

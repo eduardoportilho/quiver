@@ -10,6 +10,14 @@ const defaultGroup = 'group_default';
 let currentGroup = defaultGroup;
 
 /**
+ * Return the path where the commands are stored.
+ * @return {string} Storage path.
+ */
+function getStoragePath() {
+  return localStoragePath;
+}
+
+/**
  * Set the command group id.
  * @param {string} group
  */
@@ -91,4 +99,5 @@ module.exports = {
   setCommands: setCommands,
   moveToTop: moveToTop,
   getCommandGroups: getCommandGroups,
+  getStoragePath: getStoragePath,
 }
